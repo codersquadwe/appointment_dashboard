@@ -8,7 +8,6 @@ const SelectGroupOne: React.FC = () => {
   const changeTextColor = () => {
     setIsOptionSelected(true);
   };
-  // a comment
 
   return (
     <div className="mb-4.5">
