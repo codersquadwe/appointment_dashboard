@@ -14,12 +14,9 @@ export default function DefaultLayout({
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { isLoggedIn, isAuthorized } = useAuth();
   const router = useRouter();
-  if (!isLoggedIn || !isAuthorized) {
-    router.push("/auth/signin");
-  }
   return (
     <>
-      {isLoggedIn && isAuthorized ? (
+      {isAuthorized ? (
         <div className="flex h-screen overflow-hidden">
           {/* <!-- ===== Sidebar Start ===== --> */}
           <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
@@ -34,21 +31,18 @@ export default function DefaultLayout({
             {/* <!-- ===== Main Content Start ===== --> */}
             <main>
               <div className="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10">
-                {isLoggedIn && isAuthorized ? (
-                  <>
-                    {/* Render content based on user's authentication status and role */}
                     {children}
-                  </>
-                ) : (
-                  <p>Please <Link href="/login">login</Link> to access this page.</p>
-                )}
               </div>
             </main>
             {/* <!-- ===== Main Content End ===== --> */}
           </div>
           {/* <!-- ===== Content Area End ===== --> */}
         </div>
-      ) : null}
+      ) : (
+          <>
+            <h2 className="text-center text-3xl font-bold"><Link href="/auth/login">Login</Link> to view this page</h2>
+          </>
+      )}
     </>
   );
 }

@@ -1,4 +1,4 @@
-import jwt_decode from 'jwt-decode'; 
+import { jwtDecode } from 'jwt-decode'; 
 import Cookies from 'js-cookie'
 import { useEffect, useState } from 'react';
 
@@ -8,19 +8,20 @@ export default function useAuth() {
 
   useEffect(() => {
     const token = Cookies.get("token"); // Get token from cookies/local storage
-
+console.log(token)
     if (token) {
       try {
         // Decrypt token and extract payload
-        const decodedToken = jwt_decode(token);
-
+        const decodedToken = jwtDecode(token);
+        console.log(decodedToken)
         // Extract role from decoded token payload
         const userRole = decodedToken.role; // Assuming role is stored in 'role' field of token payload
 
         setIsLoggedIn(true);
 
         // Check user role
-        if (userRole === "organization" || userRole === "superadmin") {
+        if (userRole === "organization" || userRole === "superAdmin") {
+          console.log("User is authorized");
           setIsAuthorized(true);
         } 
       } catch (error) {
