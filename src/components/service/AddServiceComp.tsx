@@ -15,6 +15,8 @@ type Inputs = {
     description: string
     price: number
     image: string
+    min_time: number
+    max_time: number
 }
 const AddServiceComp: React.FC = () => {
     const {
@@ -72,7 +74,9 @@ const AddServiceComp: React.FC = () => {
                     price: data.price,
                     description: data.description,
                     category: selectedOption,
-                    image: img
+                    image: img,
+                    min_time: data.min_time,
+                    max_time: data.max_time
                 }, {
                 headers: {
                     authorization: `${token}`,
@@ -125,6 +129,30 @@ const AddServiceComp: React.FC = () => {
                                 {...register("price", { required: true })}
                                 className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                             />
+                        </div>
+                        <div className="mb-4.5 grid grid-cols-2 items-center gap-x-4 w-full">
+                             <div >
+                            <label className="mb-3 block text-sm font-medium text-black dark:text-white">
+                                Minimum Time (in minutes)
+                            </label>
+                            <input
+                                type="number"
+                                placeholder="Enter minimum time"
+                                {...register("min_time", { required: true })}
+                                className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                            />
+                        </div>
+                            <div>
+                                <label className="mb-3 block text-sm font-medium text-black dark:text-white">
+                                    Maximum Time (in minutes)
+                                </label>
+                                <input
+                                    type="number"
+                                    placeholder="Enter maximum time"
+                                    {...register("max_time", { required: true })}
+                                    className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                                />
+                            </div>
                         </div>
                         <div className='mb-4.5'>
                             <label className="mb-3 block text-sm font-medium text-black dark:text-white">
