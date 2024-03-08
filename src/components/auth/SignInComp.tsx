@@ -5,10 +5,10 @@ import Link from "next/link";
 import Image from "next/image";
 import { FaRegEnvelope } from "react-icons/fa";
 import { CiLock } from "react-icons/ci";
-
 import { useForm } from 'react-hook-form';
 import axios from "axios";
 import Cookies from 'js-cookie'
+import instance from "@/axios/axios";
 
 
 type Inputs = {
@@ -27,11 +27,15 @@ const SignInComp: React.FC = () => {
     const onSignIn = async (data: any) => {
         console.log("in")
         try {
-            const res = await axios.post(`${process.env.NEXT_PUBLIC_SERVER}/auth/login`, data);
+            const res = await instance.post(`/auth/login`, data);
             console.log(res)
             if (res.status === 200) {
                 console.log(res.data.data);
                 Cookies.set("token", res.data.data.token);
+                Cookies.set("refreshToken", res.data.data.refreshToken);
+                Cookies.set("email", res.data.data.user.email);
+                Cookies.set("name", res.data.data.user.name);
+                Cookies.set("role", res.data.data.user.role);
                 window.location.href = "/";
             }
 
@@ -242,14 +246,6 @@ const SignInComp: React.FC = () => {
                                         >Sign In</button>
                                     </div>
 
-                                    <div className="mt-6 text-center">
-                                        <p>
-                                            Don&apos;t have an account?{" "}
-                                            <Link href="/auth/signup" className="text-primary">
-                                                Sign up
-                                            </Link>
-                                        </p>
-                                    </div>
                                 </form>
                             </div>
                         </div>

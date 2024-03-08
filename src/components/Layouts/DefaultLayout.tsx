@@ -1,10 +1,12 @@
 "use client";
-import React, { useState, ReactNode } from "react";
+import React, { useState, useEffect, ReactNode } from "react";
 import Sidebar from "@/components/Sidebar";
 import Header from "@/components/Header";
 import useAuth from './../../hooks/useAuth';
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import Loader from "../common/Loader";
+import Cookies from 'js-cookie';
 
 export default function DefaultLayout({
   children,
@@ -12,11 +14,28 @@ export default function DefaultLayout({
   children: React.ReactNode;
 }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const { isLoggedIn, isAuthorized } = useAuth();
+  const [isAuthorized, setIsAuthorized] = useState(false);
+  const [loading, setLoading] = useState(true)
   const router = useRouter();
+  const role = Cookies.get("role");
+  
+  useEffect(() => {
+    if (role === "brand" || role === "superAdmin") {
+      console.log("User is authorized");
+      setIsAuthorized(true);
+      setLoading(false)
+    }
+    else{
+      setLoading(false)
+    router.push("/auth/signin");
+  }
+  },[isAuthorized])
   return (
     <>
-      {isAuthorized ? (
+      {loading ? (
+        <Loader />
+      ) : (       
+    
         <div className="flex h-screen overflow-hidden">
           {/* <!-- ===== Sidebar Start ===== --> */}
           <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
@@ -37,12 +56,9 @@ export default function DefaultLayout({
             {/* <!-- ===== Main Content End ===== --> */}
           </div>
           {/* <!-- ===== Content Area End ===== --> */}
-        </div>
-      ) : (
-          <>
-            <h2 className="text-center text-3xl font-bold"><Link href="/auth/login">Login</Link> to view this page</h2>
-          </>
-      )}
+    </div >
+            )
+}
     </>
   );
 }

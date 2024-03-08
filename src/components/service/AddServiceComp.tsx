@@ -7,7 +7,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { IoIosArrowDown } from "react-icons/io";
 import { IMGBB_API, IMGBB_KEY } from '../../../config';
-
+import instance from "@/axios/axios";
 
 type Inputs = {
     title: string
@@ -28,6 +28,7 @@ const AddServiceComp: React.FC = () => {
     const token = Cookies.get('token');
     const [selectedFile, setSelectedFile] = useState(null);
     const [selectedOption, setSelectedOption] = useState<string>("");
+    const [selectedOptionBrand, setSelectedOptionBrand] = useState<string>("");
     const [isOptionSelected, setIsOptionSelected] = useState<boolean>(false);
     const [categories, setCategories] = useState([]);
     const [img, setImg] = useState('')
@@ -35,10 +36,12 @@ const AddServiceComp: React.FC = () => {
         setIsOptionSelected(true);
     };
 
+    const brand = Cookies.get("name");
+
     useEffect(() => {
         const getCategories = async () => {
             try {
-                const res: any = await axios.get(`${process.env.NEXT_PUBLIC_SERVER}/category/getAllCategories`);
+                const res: any = await instance.get(`/category/getAllCategories`);
                 console.log(res)
                 if (res.status === 200) {
                     setCategories(res.data.data);
@@ -68,13 +71,14 @@ const AddServiceComp: React.FC = () => {
     }
     const onAddService = async (data: any) => {
         try {
-            const res = await axios.post(`${process.env.NEXT_PUBLIC_SERVER}/service/createService`,
+            const res = await instance.post(`/service/createService`,
                 {
                     title: data.title,
                     price: data.price,
                     description: data.description,
                     category: selectedOption,
                     image: img,
+                    brand: brand,
                     min_time: data.min_time,
                     max_time: data.max_time
                 }, {
