@@ -39,7 +39,7 @@ export default function useAuth() {
             setIsAuthorized(false);
             setLoading(false);
         }
-    }, []);
+    }, [token]);
 
     return { isLoggedIn, isAuthorized, loading };
 }

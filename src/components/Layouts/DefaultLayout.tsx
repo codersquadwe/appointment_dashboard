@@ -29,7 +29,7 @@ export default function DefaultLayout({
       setLoading(false)
     router.push("/auth/signin");
   }
-  },[isAuthorized])
+  },[isAuthorized, role, router])
   return (
     <>
       {loading ? (

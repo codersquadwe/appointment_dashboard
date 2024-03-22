@@ -43,7 +43,7 @@ const AddProfessionalComp: React.FC = () => {
     }
     const onAddProfessional = async (data: any) => {
         try {
-            const res = await instance.post(`/service/createService`,
+            const res = await instance.post(`/professional/createProfessional`,
                 {
                     name: data.name,
                     description: data.description,
@@ -86,7 +86,7 @@ const AddProfessionalComp: React.FC = () => {
                             </label>
                             <input
                                 type="text"
-                                placeholder="Enter category name"
+                                placeholder="Enter professional name"
                                 {...register("name", { required: true })}
                                 className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                             />

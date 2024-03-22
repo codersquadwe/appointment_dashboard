@@ -47,8 +47,8 @@ const SignInComp: React.FC = () => {
     return (
         <>
             <div>
-                <div className="h-screen my-auto rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-                    <div className="flex flex-wrap items-center">
+                <div className="h-screen my-auto rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark w-full flex justify-center items-center">
+                    <div className="flex flex-wrap items-center w-full">
                         <div className="hidden w-full xl:block xl:w-1/2">
                             <div className="px-26 py-17.5 text-center">
                                 <Link className="mb-5.5 inline-block" href="/">
