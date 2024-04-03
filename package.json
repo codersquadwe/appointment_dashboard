@@ -24,7 +24,11 @@
     "react-dom": "^18",
     "react-hook-form": "^7.51.0",
     "react-icons": "^5.0.1",
-    "react-toastify": "^10.0.4"
+    "react-multi-select-component": "^4.3.4",
+    "react-select": "^5.8.0",
+    "react-toastify": "^10.0.4",
+    "sweetalert2": "^11.10.7",
+    "sweetalert2-react-content": "^5.0.7"
   },
   "devDependencies": {
     "@types/js-cookie": "^3.0.6",

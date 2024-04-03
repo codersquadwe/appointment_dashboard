@@ -79,6 +79,8 @@ const AddScheduele: React.FC = () => {
                     console.log(res);
                     if (res.status === 200) {
                         toast.success(res.data.message)
+                    }else{
+                        toast.error(res.data.message)
                     }
                 } else {
                     // If existing slots, update the existing slot object with the new slots

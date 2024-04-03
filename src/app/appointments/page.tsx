@@ -16,3 +16,4 @@ const TablesPage = () => {
 };
 
 export default TablesPage;
+``
