@@ -13,6 +13,7 @@ import { HiOutlineDocumentText } from "react-icons/hi2";
 import { SiGooglemeet } from "react-icons/si";
 import { PiBagSimpleBold } from "react-icons/pi";
 import { IoCalendarOutline } from "react-icons/io5";
+import Cookies from 'js-cookie'
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -20,7 +21,9 @@ interface SidebarProps {
 }
 
 const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
+  const role = Cookies.get("role")
   const pathname = usePathname();
+  console.log(role)
 
   const trigger = useRef<any>(null);
   const sidebar = useRef<any>(null);
@@ -117,8 +120,9 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
             <h3 className="mb-4 ml-4 text-sm font-semibold text-bodydark2">
               MENU
             </h3>
-
+{role == "brand" && (
             <ul className="mb-6 flex flex-col gap-1.5">
+              
               {/* <!-- Menu Item Dashboard --> */}
               <SidebarLinkGroup
                 activeCondition={
@@ -149,24 +153,6 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                   );
                 }}
               </SidebarLinkGroup>
-              {/* <!-- Menu Item Dashboard --> */}
-
-              {/* <!-- Menu Item Calendar --> */}
-              {/* <li>
-                <Link
-                  href="/calendar"
-                  className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                    pathname.includes("calendar") &&
-                    "bg-graydark dark:bg-meta-4"
-                  }`}
-                >
-                <FaRegCalendarAlt />
-                  Calendar
-                </Link>
-              </li> */}
-              {/* <!-- Menu Item Calendar --> */}
-
-                {/* <!-- Menu Item Calendar --> */}
               <li>
                 <Link
                   href="/appointments"
@@ -180,9 +166,6 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                   Appointments
                 </Link>
               </li>
-              {/* <!-- Menu Item Calendar --> */}
-
-              {/* <!-- Menu Item Profile --> */}
               <li>
                 <Link
                   href="/customAppointment"
@@ -446,8 +429,35 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                     </React.Fragment>
                   );
                 }}
-              </SidebarLinkGroup>
+              </SidebarLinkGroup>  
             </ul>
+             )}
+              {role === "professional" && (
+                 <ul className="mb-6 flex flex-col gap-1.5">
+                <li>
+                  <Link
+                    href="/appointments"
+                    className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${pathname.includes("tables") &&
+                      "bg-graydark dark:bg-meta-4"
+                      }`}
+                  >
+                    <SiGooglemeet />
+
+                    Appointments
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/customAppointment"
+                    className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${pathname.includes("customAppointments") && "bg-graydark dark:bg-meta-4"
+                      }`}
+                  >
+                    <RxPerson />
+                    Custom Appointment
+                  </Link>
+                </li>
+                  </ul>
+              )}
           </div>
         </nav>
       </div>

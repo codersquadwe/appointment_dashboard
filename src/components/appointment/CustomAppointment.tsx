@@ -36,6 +36,13 @@ const CustomAppointment: React.FC = () => {
     const [selectedSlot, setSelectedSlot] = useState("");
 
     const [professionals, setProfessionals] = useState([]);
+
+
+    const handleDateSelection = (date:any) => {
+    setSelectedDate(date);
+};
+
+console.log(selectedDate)
     useEffect(() => {
         const getServices = async () => {
             try {
@@ -70,29 +77,38 @@ const CustomAppointment: React.FC = () => {
             fetchProfessionalSlots(selectedProfessional);
         }
     }, [selectedProfessional, selectedDate]);
+   const fetchProfessionalSlots = async (professional: any) => {
+    try {
+        const response = await instance.get(`/professional/getSingleProf/${professional}`);
+        const { available_slots } = response.data.data;
 
-    const fetchProfessionalSlots = async (professional: any) => {
-        try {
-            const response = await instance.get(`/professional/getSingleProf/${professional._id}`);
-            console.log(response.data.data);
-            const { available_days } = response.data.data;
-            if (response.data.data.available_days) {
-                console.log(selectedDate)
-                const slots: any = available_days.find((day: { date: string; }) => day.date === selectedDate)?.available_slots || [];
-                console.log(slots)
-                setAvailableSlots(slots);
+        if (available_slots && available_slots.length > 0) {
+            const slotsForSelectedDate = available_slots.find((day: any) => day.date === selectedDate);
+            console.log(slotsForSelectedDate)
+            if (slotsForSelectedDate) {
+                setAvailableSlots(slotsForSelectedDate.slots);
             } else {
+                // If no slots available for the selected date, set available slots to an empty array
                 setAvailableSlots([]);
             }
-        } catch (error) {
-            console.error('Error fetching professional slots:', error);
-            // Handle error
+        } else {
+            // If no available slots data is present, set available slots to an empty array
+            setAvailableSlots([]);
         }
-    };
+    } catch (error) {
+        console.error('Error fetching professional slots:', error);
+        // Handle error
+    }
+};
+
 
     const onAddAppointment = async (data: Inputs) => {
+        console.log(data)
         try {
-            const res = await instance.post(`/appointment/createAppointment`, data, {
+            const res = await instance.post(`/appointment/createAppointment`, {
+               ...data,
+               professional: selectedProfessional
+            }, {
                 headers: {
                     authorization: `${token}`,
                 },
@@ -146,6 +162,9 @@ const CustomAppointment: React.FC = () => {
                         </div>
                         <div className="mb-4.5">
                             <div className="relative z-20 bg-white dark:bg-form-input  mb-4.5">
+                                 <label className="mb-3 block text-sm font-medium text-black dark:text-white">
+                                Select Professional
+                            </label>
                                 <select
                                     value={selectedProfessional}
                                     onChange={(e) => {
@@ -187,11 +206,13 @@ const CustomAppointment: React.FC = () => {
                             <label className="mb-3 block text-sm font-medium text-black dark:text-white">
                                 Select Date
                             </label>
-                            <input
-                                type="date"
-                                {...register("date", { required: true })}
-                                className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                            />
+                           <input
+    type="date"
+    onClick={(e:any) => handleDateSelection(e.target.value)}
+    {...register("date", { required: true })}
+    className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+/>
+
                         </div>
                         <div className=" mb-4.5">
                             <label className="mb-3 block text-sm font-medium text-black dark:text-white">

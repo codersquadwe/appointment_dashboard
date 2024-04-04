@@ -8,6 +8,8 @@ import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import Cookies from 'js-cookie';
 import EditModal from "./EditModal"
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const MySwal = withReactContent(Swal);
 
@@ -33,7 +35,6 @@ const AllAppointments = () => {
             try {
                 const res = await axios.get(`${process.env.NEXT_PUBLIC_SERVER}/appointment/getAllAppointments`);
                 if (res.status === 200) {
-                    console.log(res.data.data)
                     setAppointments(res.data.data);
                 }
             } catch (e) {
@@ -67,7 +68,6 @@ const AllAppointments = () => {
     const getServiceName = (serviceIds: string[]) => {
         const serviceNames = serviceIds.map(serviceId => {
             const service: any = services.find(service => service._id === serviceId);
-            console.log(service)
             return service ? service.title : '';
         });
         return serviceNames.join(', '); // Concatenate service names with comma separator
@@ -109,8 +109,11 @@ const AllAppointments = () => {
     const handleUpdate = async (updatedAppointment:any) => {
     try {
         const response = await axios.patch(`${process.env.NEXT_PUBLIC_SERVER}/appointment/updateAppointment/${updatedAppointment._id}`, updatedAppointment);
+        console.log(response)
         if (response.status === 200) {
             // Update the appointments state with the updated appointment
+            setIsVisible(false)
+            toast.success("Appointment Updated")
             setAppointments(appointments.map(appointment => appointment._id === updatedAppointment._id ? updatedAppointment : appointment));
             // Close the modal here
         
@@ -230,6 +233,7 @@ const AllAppointments = () => {
             setIsVisible={setIsVisible}
             isVisible={isVisible}
             />}
+               <ToastContainer />
         </div>
     );
 };

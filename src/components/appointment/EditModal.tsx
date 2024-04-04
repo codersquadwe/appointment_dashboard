@@ -19,8 +19,10 @@ const EditAppointmentModal:any = ({ selectedAppointment, handleUpdate, professio
 
     const handleSubmit = (e:any) => {
         e.preventDefault();
+        console.log(updatedAppointment)
         handleUpdate(updatedAppointment);
-    }; useEffect(() => {
+    }; 
+    useEffect(() => {
         // If a professional is selected, fetch available slots for that professional
         if (selectedProfessional && selectedDate) {
             fetchProfessionalSlots(selectedProfessional);
@@ -47,6 +49,7 @@ const EditAppointmentModal:any = ({ selectedAppointment, handleUpdate, professio
     };
 
 
+    console.log(selectedServices)
     console.log(updatedAppointment)
     return (
          <div className={`book-modal-wrapper ${isVisible ? 'visible' : ''}`}>
