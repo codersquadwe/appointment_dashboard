@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import Select from "react-select";
 import '../../css/style.css';
 import { IoIosArrowDown } from "react-icons/io";
+import instance from '@/axios/axios';
 
-const EditAppointmentModal:any = ({ selectedAppointment, handleUpdate, professionals, services, setIsVisible, isVisible }) => {
+const EditAppointmentModal: React.FC<any> = ({ selectedAppointment, handleUpdate, professionals, services, setIsVisible, isVisible }) => {
     const [updatedAppointment, setUpdatedAppointment] = useState({ ...selectedAppointment });
         const [selectedServices, setSelectedServices] = useState<string[]>(updatedAppointment.service || []);
         const [selectedDate, setSelectedDate] = useState("");

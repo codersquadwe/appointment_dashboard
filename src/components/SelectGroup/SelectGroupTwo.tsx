@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+import { IoIosArrowDown } from "react-icons/io";
 
 const SelectGroupTwo: React.FC = () => {
   const [selectedOption, setSelectedOption] = useState<string>("");
