@@ -24,7 +24,7 @@ const AllServiceComp = () => {
 
         const getAllServices = async () => {
             try {
-                const res = await axios.get(`${process.env.NEXT_PUBLIC_SERVER}/professional/getAllProessionals/`);
+                const res = await axios.get(`${process.env.NEXT_PUBLIC_SERVER}/service/getAllServices/`);
                 if (res.status === 200) {
                     setServices(res.data.data);
                 }
