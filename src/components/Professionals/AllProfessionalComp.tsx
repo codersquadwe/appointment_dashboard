@@ -4,32 +4,46 @@ import instance from '@/axios/axios';
 import React, { useEffect, useState } from 'react';
 import Cookies from 'js-cookie';
 import Image from 'next/image';
-import { MdDelete } from "react-icons/md";
+import { MdDelete, MdModeEdit } from "react-icons/md";
+import Link from 'next/link';
 
 const AllProfessionalComp = () => {
     const [professionals, setProfessionals] = useState([]);
     const [loading, setLoading] = useState(false);
     const brand = Cookies.get('name');
 
-    useEffect(() => {
-        const getProfessionals = async () => {
-            try {
-                setLoading(true);                
-                const res = await instance.get(`/professional/getAllProfessionals?brand=${brand}`);
-                if(res.status === 200) {
-                    setProfessionals(res.data.data);
-                    setLoading(false);
-                }
-                console.log(res.data.data);
-                
-            } catch (e) {
-                console.log(e);
+    const getProfessionals = async () => {
+        try {
+            setLoading(true);
+            const res = await instance.get(`/professional/getAllProfessionals?brand=${brand}`);
+            if (res.status === 200) {
+                setProfessionals(res.data.data);
                 setLoading(false);
             }
-            
+            console.log(res.data.data);
+
+        } catch (e) {
+            console.log(e);
+            setLoading(false);
         }
+
+    }
+    useEffect(() => {
+       
         getProfessionals();
     }, [brand])
+
+    const deleteProfessional = async (id: string) => {
+        try {
+            const res = await instance.delete(`/professional/deleteProfessional/${id}`);
+            if(res.status === 200) {
+                console.log(res.data.data);
+                getProfessionals();
+            }
+        } catch (e) {
+            console.log(e);
+        }
+    }
     return (
         <div className="rounded-sm border border-stroke bg-white px-5 pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
             <h4 className="mb-6 text-xl font-semibold text-black dark:text-white">
@@ -95,8 +109,14 @@ const AllProfessionalComp = () => {
                             <p className="text-black dark:text-white">{prof.brand}</p>
                         </div>
 
-                        <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
-                            <button className="text-xl bg-danger text-[#fff] rounded-full p-4"><MdDelete /></button>
+                        <div className="flex items-center justify-center p-2.5 xl:p-5 text-[15px] gap-x-2">
+                            <button
+                                onClick={() => deleteProfessional(prof._id)}
+                                className="text-xl bg-danger text-[#fff] rounded-full p-2"
+                            ><MdDelete /></button>
+                            <Link className="text-xl bg-warning text-[#fff] rounded-full p-2"
+                                href={`/professionals/edit/${prof._id}`}
+                            ><MdModeEdit /></Link>
                         </div>
                     </div>
                 ))}
