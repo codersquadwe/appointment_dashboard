@@ -4,11 +4,25 @@ import React, { useEffect, useState } from 'react';
 import instance from '@/axios/axios';
 import { MdDelete, MdModeEdit } from 'react-icons/md';
 import Link from 'next/link';
+import Cookies from 'js-cookie';
+import { toast, ToastContainer } from 'react-toastify';
 
 const AllServiceComp = () => {
     const [services, setServices] = useState<any[]>([]);
     const [categories, setCategories] = useState<any[]>([]);
 
+    const token = Cookies.get("token");
+    const getAllServices = async () => {
+        try {
+            const res = await axios.get(`${process.env.NEXT_PUBLIC_SERVER}/service/getAllServices/`);
+            if (res.status === 200) {
+                setServices(res.data.data);
+            }
+        } catch (e) {
+            console.log(e);
+        }
+    };
+    
     useEffect(() => {
         const getCategories = async () => {
             try {
@@ -23,18 +37,8 @@ const AllServiceComp = () => {
             }
         }
         getCategories()
-
-        const getAllServices = async () => {
-            try {
-                const res = await axios.get(`${process.env.NEXT_PUBLIC_SERVER}/service/getAllServices/`);
-                if (res.status === 200) {
-                    setServices(res.data.data);
-                }
-            } catch (e) {
-                console.log(e);
-            }
-        };
         getAllServices();
+       
     }, []);
 
 
@@ -43,7 +47,23 @@ const AllServiceComp = () => {
         return category ? category.name : 'Unknown';
     };
 
-
+    const deleteService = async (id: string) => {
+        try {
+            const res = await instance.delete(`/service/deleteService/${id}`, {
+                headers: {
+                    authorization: `${token}`,
+                },
+            });
+            console.log(res);
+            if (res.status === 200) {
+                console.log(res.data.data);
+                getAllServices();
+                toast.success(res.data.message);
+            }
+        } catch (e) {
+            console.log(e)
+        }
+    }
 
     return (
         <div className="rounded-sm border border-stroke bg-white px-5 pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1 relative">
@@ -105,6 +125,7 @@ const AllServiceComp = () => {
                             </div>
                             <div className="flex items-center justify-center p-2.5 xl:p-5 text-[15px] gap-x-2">
                                 <button
+                                    onClick={() => deleteService(service._id)}
                                     className="text-xl bg-danger text-[#fff] rounded-full p-2"
                                     ><MdDelete /></button>
                                 <Link className="text-xl bg-warning text-[#fff] rounded-full p-2"
@@ -115,6 +136,7 @@ const AllServiceComp = () => {
                     </React.Fragment>
                 ))}
             </div>
+            <ToastContainer />
         </div>
     );
 };

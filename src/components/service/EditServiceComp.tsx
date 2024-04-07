@@ -131,6 +131,8 @@ const EditServiceComp: React.FC = () => {
         }
     }, [selectedFile]);
 
+  
+
     return (
         <div>
             <h2 className="text-3xl font-semibold mb-2">Edit Service</h2>

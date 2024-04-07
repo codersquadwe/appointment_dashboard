@@ -1,8 +1,10 @@
 import React from 'react';
 import DefaultLayout from '../../../../components/Layouts/DefaultLayout';
 import EditServiceComp from '../../../../components/service/EditServiceComp';
-import { useRouter } from 'next/router';
 
+export const metadata: any = {
+    title: "Edit Service",
+};
 const EditService = () => {
     return (
         <div>
