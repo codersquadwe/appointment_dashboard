@@ -3,6 +3,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import instance from '@/axios/axios';
 import { MdDelete, MdModeEdit } from 'react-icons/md';
+import Link from 'next/link';
 
 const AllServiceComp = () => {
     const [services, setServices] = useState<any[]>([]);
@@ -106,9 +107,9 @@ const AllServiceComp = () => {
                                 <button
                                     className="text-xl bg-danger text-[#fff] rounded-full p-2"
                                     ><MdDelete /></button>
-                                <button className="text-xl bg-warning text-[#fff] rounded-full p-2"
-                                    // onClick={() => handleEdit(appoint)}
-                                ><MdModeEdit /></button>
+                                <Link className="text-xl bg-warning text-[#fff] rounded-full p-2"
+                                    href={`/service/edit/${service._id}`}                                    
+                                ><MdModeEdit /></Link>
                             </div>
                             </div>
                     </React.Fragment>
