@@ -10,9 +10,10 @@ import { IMGBB_API, IMGBB_KEY } from '../../../config';
 import instance from './../../axios/axios';
 
 type Inputs = {
-    name: string
-    description: string
-    image: string
+    brand: string
+    address: string
+    map_link: string
+    location_image: string
 }
 const AddLocationComp: React.FC = () => {
     const {
@@ -45,9 +46,10 @@ const AddLocationComp: React.FC = () => {
         try {
             const res = await instance.post(`/location/createLocation`,
                 {
-                    name: data.name,
-                    description: data.description,
-                    image: img
+                    brand: brand,
+                    address: data.address,
+                    map_link: data.map_link,
+                    location_image: img
                 }, {
                 headers: {
                     authorization: `${token}`,
@@ -70,7 +72,7 @@ const AddLocationComp: React.FC = () => {
     }, [selectedFile]);
     return (
         <div>
-            <h2 className="text-3xl font-semibold mb-2">Add Professional</h2>
+            <h2 className="text-3xl font-semibold mb-2">Add Location</h2>
             <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
                 <div className="border-b border-stroke px-6.5 py-4 dark:border-strokedark">
                     <h3 className="font-medium text-black dark:text-white">
@@ -86,7 +88,7 @@ const AddLocationComp: React.FC = () => {
                             <input
                                 type="text"
                                 placeholder="Enter professional name"
-                                {...register("name", { required: true })}
+                                {...register("address", { required: true })}
                                 className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                             />
                         </div>
@@ -108,7 +110,7 @@ const AddLocationComp: React.FC = () => {
                             <input
                                 type="url"
                                 placeholder="Enter map link"
-                                {...register("name", { required: true })}
+                                {...register("map_link", { required: true })}
                                 className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                             />
                         </div>

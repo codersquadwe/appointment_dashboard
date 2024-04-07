@@ -11,9 +11,10 @@ import instance from './../../axios/axios';
 import { useParams } from 'next/navigation';
 
 type Inputs = {
-    name: string
-    description: string
-    image: string
+    brand: string
+    address: string
+    map_link: string
+    location_image: string
 }
 const EditLocationComp: React.FC = () => {
     const {
@@ -61,14 +62,15 @@ const EditLocationComp: React.FC = () => {
             }
         }
         getSingleLocation();
-    })
-    const onAUpdateLocation = async (data: any) => {
+    }, [id, token]);
+    const onUpdateLocation = async (data: any) => {
         try {
-            const res = await instance.post(`/location/createProfessional`,
+            const res = await instance.patch(`/location/updateLocation/${id}`,
                 {
-                    name: data.name ? data.name : singleLocation.name,
-                    description: data.description ? data.description : singleLocation.description,
-                    image: img ? img : singleLocation.image
+                    brand: brand,
+                    address: data.address ? data.address : singleLocation.address,
+                    map_link: data.map_link ? data.map_link : singleLocation.map_link,
+                    location_image: img ? img : singleLocation.location_image
                 }, {
                 headers: {
                     authorization: `${token}`,
@@ -76,8 +78,8 @@ const EditLocationComp: React.FC = () => {
             });
             console.log(res);
             if (res.status === 200) {
-                console.log(res.data.data);
-                toast.success(res.data.message);
+                console.log(res.data);
+                toast.success("Location updated successfully");
             }
         } catch (e) {
             console.log(e)
@@ -89,16 +91,18 @@ const EditLocationComp: React.FC = () => {
             saveImage();
         }
     }, [selectedFile]);
+
+    console.log(singleLocation)
     return (
         <div>
-            <h2 className="text-3xl font-semibold mb-2">Edit Professional</h2>
+            <h2 className="text-3xl font-semibold mb-2">Edit Location</h2>
             <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
                 <div className="border-b border-stroke px-6.5 py-4 dark:border-strokedark">
                     <h3 className="font-medium text-black dark:text-white">
                         Edit Location
                     </h3>
                 </div>
-                <form action="#" onSubmit={handleSubmit(onAUpdateLocation)}>
+                <form action="#" onSubmit={handleSubmit(onUpdateLocation)}>
                     <div className="p-6.5">
                         <div className="mb-4.5">
                             <label className="mb-3 block text-sm font-medium text-black dark:text-white">
@@ -106,9 +110,9 @@ const EditLocationComp: React.FC = () => {
                             </label>
                             <input
                                 type="text"
-                                defaultValue={singleLocation?.name}
-                                placeholder="Enter professional name"
-                                {...register("name")}
+                                defaultValue={singleLocation?.address}
+                                placeholder="Enter address"
+                                {...register("address")}
                                 className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                             />
                         </div>
@@ -129,9 +133,9 @@ const EditLocationComp: React.FC = () => {
                             </label>
                             <input
                                 type="url"
-                                defaultValue={singleLocation?.description}
+                                defaultValue={singleLocation?.map_link}
                                 placeholder="Enter map link"
-                                {...register("name")}
+                                {...register("map_link")}
                                 className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                             />
                         </div>
