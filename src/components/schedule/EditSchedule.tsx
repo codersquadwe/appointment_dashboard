@@ -7,17 +7,18 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { IoIosArrowDown } from "react-icons/io";
 import { IMGBB_API, IMGBB_KEY } from '../../../config';
-import instance from "@/axios/axios";
 import flatpickr from "flatpickr";
 import { GoPlus } from "react-icons/go";
 import { format } from 'date-fns';
+import instance from '../../axios/axios';
+import { useParams } from 'next/navigation';
 
 type Inputs = {
     professional: string
     date: string
     slots: string[]
 }
-const AddScheduele: React.FC = () => {
+const EditSchedule: React.FC = () => {
     const {
         register,
         handleSubmit,
@@ -31,13 +32,36 @@ const AddScheduele: React.FC = () => {
     const [selectedDate, setSelectedDate] = useState<string>("");
     const [selectedTime, setSelectedTime] = useState<string>("");
     const [slots, setSlots] = useState<string[]>([]);
+    const [singleProf, setSingleProf] = useState<any>({});
+    const [loading, setLoading] = useState<boolean>(false)
+    const id = useParams().id; // Ensure id is a string
     const changeTextColor = () => {
         setIsOptionSelected(true);
     };
 
     const brand = Cookies.get("name");
 
-    console.log(slots)
+    useEffect(() => {
+        const getSingleProfessional = async () => {
+            try {
+                setLoading(true);
+                const res = await instance.get(`/professional/getSingleProf/${id}`, {
+                    headers: {
+                        authorization: `${token}`,
+                    },
+                });
+                console.log(res);
+                if (res.status === 200) {
+                    setSingleProf(res.data.data);
+                    setLoading(false);
+                }
+            } catch (e) {
+                console.log(e)
+                setLoading(false);
+            }
+        }
+        getSingleProfessional();
+    }, [id, token])
     useEffect(() => {
         const getProfessionals = async () => {
             try {
@@ -53,7 +77,7 @@ const AddScheduele: React.FC = () => {
         getProfessionals()
     }, [brand])
 
-    const onAddSchedule = async (data: any) => {
+    const onEditSchedule = async (data: any) => {
         try {
             const updatedProfessional: any = professionals.find((prof: { _id: string; }) => prof._id === selectedOption);
             if (updatedProfessional) {
@@ -78,7 +102,7 @@ const AddScheduele: React.FC = () => {
                     console.log(res);
                     if (res.status === 200) {
                         toast.success(res.data.message)
-                    }else{
+                    } else {
                         toast.error(res.data.message)
                     }
                 } else {
@@ -143,7 +167,7 @@ const AddScheduele: React.FC = () => {
                         Schedule
                     </h3>
                 </div>
-                <form action="#" onSubmit={handleSubmit(onAddSchedule)}>
+                <form action="#" onSubmit={handleSubmit(onEditSchedule)}>
                     <div className="p-6.5">
                         <div className='mb-4.5'>
                             <div className="relative z-20 bg-white dark:bg-form-input  mb-4.5">
@@ -238,4 +262,4 @@ const AddScheduele: React.FC = () => {
     );
 };
 
-export default AddScheduele;
+export default EditSchedule;

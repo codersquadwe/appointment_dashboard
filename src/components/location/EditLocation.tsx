@@ -8,24 +8,27 @@ import 'react-toastify/dist/ReactToastify.css';
 import { IoIosArrowDown } from "react-icons/io";
 import { IMGBB_API, IMGBB_KEY } from '../../../config';
 import instance from './../../axios/axios';
+import { useParams } from 'next/navigation';
 
 type Inputs = {
     name: string
     description: string
     image: string
 }
-const AddLocationComp: React.FC = () => {
+const EditLocationComp: React.FC = () => {
     const {
         register,
         handleSubmit,
         watch,
         formState: { errors },
-    } = useForm < Inputs > ();
+    } = useForm<Inputs>();
     const token = Cookies.get('token');
     const [selectedFile, setSelectedFile] = useState(null);
+    const [singleLocation, setSingleLocation] = useState<any>({});
     const [img, setImg] = useState('')
     const brand = Cookies.get("name");
-
+    const id = useParams().id; // Ensure id is a string
+    
     const saveImage = async () => {
         try {
             const formData: any = new FormData();
@@ -41,13 +44,31 @@ const AddLocationComp: React.FC = () => {
             console.log(e)
         }
     }
-    const onAddLocation = async (data: any) => {
+    useEffect(() => {
+        const getSingleLocation = async () => {
+            try {
+                const res = await instance.get(`/location/getSingleLocation/${id}`, {
+                    headers: {
+                        authorization: `${token}`,
+                    },
+                });
+                console.log(res);
+                if (res.status === 200) {
+                   setSingleLocation(res.data.data);
+                }
+            } catch (e) {
+                console.log(e)
+            }
+        }
+        getSingleLocation();
+    })
+    const onAUpdateLocation = async (data: any) => {
         try {
-            const res = await instance.post(`/location/createLocation`,
+            const res = await instance.post(`/location/createProfessional`,
                 {
-                    name: data.name,
-                    description: data.description,
-                    image: img
+                    name: data.name ? data.name : singleLocation.name,
+                    description: data.description ? data.description : singleLocation.description,
+                    image: img ? img : singleLocation.image
                 }, {
                 headers: {
                     authorization: `${token}`,
@@ -70,23 +91,24 @@ const AddLocationComp: React.FC = () => {
     }, [selectedFile]);
     return (
         <div>
-            <h2 className="text-3xl font-semibold mb-2">Add Professional</h2>
+            <h2 className="text-3xl font-semibold mb-2">Edit Professional</h2>
             <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
                 <div className="border-b border-stroke px-6.5 py-4 dark:border-strokedark">
                     <h3 className="font-medium text-black dark:text-white">
-                        Add Location
+                        Edit Location
                     </h3>
                 </div>
-                <form action="#" onSubmit={handleSubmit(onAddLocation)}>
+                <form action="#" onSubmit={handleSubmit(onAUpdateLocation)}>
                     <div className="p-6.5">
                         <div className="mb-4.5">
                             <label className="mb-3 block text-sm font-medium text-black dark:text-white">
-                                Address 
+                                Address
                             </label>
                             <input
                                 type="text"
+                                defaultValue={singleLocation?.name}
                                 placeholder="Enter professional name"
-                                {...register("name", { required: true })}
+                                {...register("name")}
                                 className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                             />
                         </div>
@@ -103,18 +125,19 @@ const AddLocationComp: React.FC = () => {
 
                         <div className="mb-6">
                             <label className="mb-3 block text-sm font-medium text-black dark:text-white">
-                               Map Link
+                                Map Link
                             </label>
                             <input
                                 type="url"
+                                defaultValue={singleLocation?.description}
                                 placeholder="Enter map link"
-                                {...register("name", { required: true })}
+                                {...register("name")}
                                 className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                             />
                         </div>
 
                         <button className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray hover:bg-opacity-90">
-                            Add Location
+                            Edit Location
                         </button>
                     </div>
                 </form>
@@ -124,4 +147,4 @@ const AddLocationComp: React.FC = () => {
     );
 };
 
-export default AddLocationComp;
+export default EditLocationComp;
