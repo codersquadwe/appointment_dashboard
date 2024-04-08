@@ -6,16 +6,16 @@ import Link from "next/link";
 import Image from "next/image";
 import SidebarLinkGroup from "./SidebarLinkGroup";
 import { RxDashboard, RxPerson } from "react-icons/rx";
-import { FaRegCalendarAlt } from "react-icons/fa";
 import { IoIosArrowUp, IoIosArrowDown } from "react-icons/io";
 import { MdOutlineDesignServices } from "react-icons/md";
 import { HiOutlineDocumentText } from "react-icons/hi2";
 import { SiGooglemeet } from "react-icons/si";
 import { PiBagSimpleBold } from "react-icons/pi";
-import { IoCalendarOutline } from "react-icons/io5";
 import { FaLocationDot } from "react-icons/fa6";
 import { IoTimeOutline } from "react-icons/io5";
+import { FiGift } from "react-icons/fi";
 import Cookies from 'js-cookie'
+
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -360,7 +360,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                   }}
                 </SidebarLinkGroup>
 
-                {/* Professional */}
+                {/* schedule */}
                 <SidebarLinkGroup
                   activeCondition={
                     pathname === "/schedule" || pathname.includes("schedule")
@@ -481,6 +481,69 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                     );
                   }}
                 </SidebarLinkGroup>
+
+                {/* gift */}
+                <SidebarLinkGroup
+                  activeCondition={
+                    pathname === "/gift" || pathname.includes("gift")
+                  }
+                >
+                  {(handleClick, open) => {
+                    return (
+                      <React.Fragment>
+                        <Link
+                          href="#"
+                          className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${(pathname === "/gift" ||
+                            pathname.includes("gift")) &&
+                            "bg-graydark dark:bg-meta-4"
+                            }`}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            sidebarExpanded
+                              ? handleClick()
+                              : setSidebarExpanded(true);
+                          }}
+                        >
+                          <FiGift />
+                          Gift
+                          {open ? <IoIosArrowUp className={`absolute right-4 top-1/2 -translate-y-1/2 fill-current`} />
+                            : <IoIosArrowDown className={`absolute right-4 top-1/2 -translate-y-1/2 fill-current ${open && 'rotate-180'}`} />}
+                        </Link>
+                        {/* <!-- Dropdown Menu Start --> */}
+                        <div
+                          className={`translate transform overflow-hidden ${!open && "hidden"
+                            }`}
+                        >
+                          <ul className="mb-5.5 mt-4 flex flex-col gap-2.5 pl-6">
+                            <li>
+                              <Link
+                                href="/gift/addGift"
+                                className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${pathname === "/gift/addGift" &&
+                                  "text-white"
+                                  }`}
+                              >
+                                Add Gift
+                              </Link>
+                            </li>
+                            <li>
+                              <Link
+                                href="/gift/allGifts"
+                                className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${pathname === "/gift/allGifts" &&
+                                  "text-white"
+                                  } `}
+                              >
+                                All Gifts
+                              </Link>
+                            </li>
+                          </ul>
+                        </div>
+                        {/* <!-- Dropdown Menu End --> */}
+                      </React.Fragment>
+                    );
+                  }}
+                </SidebarLinkGroup>
+
+
               </ul>
             )}
             {role === "professional" && (

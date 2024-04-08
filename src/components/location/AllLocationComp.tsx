@@ -92,7 +92,6 @@ const AllLocationComp = () => {
                                     onClick={() => deleteLocation(location._id)}
                                 ><MdDelete /></button>
                                 <Link href={`/location/edit/${location._id}`} className="text-xl bg-warning text-[#fff] rounded-full p-2"
-                                    // onClick={() => handleEdit(location)}
                                 ><MdModeEdit /></Link>
                             </div>
                         </div>
