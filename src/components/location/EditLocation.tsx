@@ -27,7 +27,7 @@ const EditLocationComp: React.FC = () => {
     const [selectedFile, setSelectedFile] = useState(null);
     const [singleLocation, setSingleLocation] = useState<any>({});
     const [img, setImg] = useState('')
-    const brand = Cookies.get("name");
+    const brand = Cookies.get("email");
     const id = useParams().id; // Ensure id is a string
     
     const saveImage = async () => {

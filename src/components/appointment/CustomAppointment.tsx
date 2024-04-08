@@ -26,7 +26,7 @@ const CustomAppointment: React.FC = () => {
         formState: { errors },
     } = useForm<Inputs>();
     const token = Cookies.get('token');
-    const brand = Cookies.get("name");
+    const brand = Cookies.get("email");
     const [selectedProfessional, setSelectedProfessional] = useState<string>("");
     const [isOptionSelected, setIsOptionSelected] = useState<boolean>(false);
     const [services, setServices] = useState<any[]>([]);

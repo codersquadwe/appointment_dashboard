@@ -26,7 +26,7 @@ const EditProfessionalComp: React.FC = () => {
     const [selectedFile, setSelectedFile] = useState(null);
     const [img, setImg] = useState('')
     const [loading, setLoading] = useState(true);
-    const brand = Cookies.get("name");
+    const brand = Cookies.get("email");
     const id = useParams().id; // Ensure id is a string
     const [singleProf, setSingleProf] = useState<any>({});
 

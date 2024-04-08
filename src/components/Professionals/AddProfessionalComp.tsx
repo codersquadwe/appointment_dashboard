@@ -24,7 +24,7 @@ const AddProfessionalComp: React.FC = () => {
     const token = Cookies.get('token');
     const [selectedFile, setSelectedFile] = useState(null);
     const [img, setImg] = useState('')
-    const brand = Cookies.get("name");
+    const brand = Cookies.get("email");
     
     const saveImage = async () => {
         try {

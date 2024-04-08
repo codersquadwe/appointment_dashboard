@@ -8,7 +8,7 @@ import Link from 'next/link';
 
 const AllLocationComp = () => {
     const [locations, setLocations] = useState<any[]>([]);
-    const brand = Cookies.get("name");
+    const brand = Cookies.get("email");
 
     const getAllLocations = async () => {
         try {
