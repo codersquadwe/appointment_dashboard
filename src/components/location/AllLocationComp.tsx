@@ -5,6 +5,7 @@ import Cookies from 'js-cookie';
 import Image from 'next/image';
 import { MdDelete, MdModeEdit } from 'react-icons/md';
 import Link from 'next/link';
+import { useForm } from "react-hook-form"
 
 const AllLocationComp = () => {
     const [locations, setLocations] = useState<any[]>([]);
