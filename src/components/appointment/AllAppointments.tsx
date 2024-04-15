@@ -18,7 +18,7 @@ const AllAppointments = () => {
     const [services, setServices] = useState<any[]>([]);
     const [profs, setProfs] = useState<any[]>([]);
     const [selectedAppointment, setSelectedAppointment] = useState<any | null>(null); 
-    const brand = Cookies.get("name");
+    const brand = Cookies.get("email");
     const [isVisible, setIsVisible] = useState(false)
     useEffect(() => {
         const getServices = async () => {

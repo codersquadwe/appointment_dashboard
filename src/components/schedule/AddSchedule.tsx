@@ -35,7 +35,7 @@ const AddScheduele: React.FC = () => {
         setIsOptionSelected(true);
     };
 
-    const brand = Cookies.get("name");
+    const brand = Cookies.get("email");
 
     console.log(slots)
     useEffect(() => {

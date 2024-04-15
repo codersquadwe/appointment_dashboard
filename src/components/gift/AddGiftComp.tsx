@@ -5,51 +5,31 @@ import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { IoIosArrowDown } from "react-icons/io";
-import { IMGBB_API, IMGBB_KEY } from '../../../config';
-import instance from './../../axios/axios';
-
+import instance from '../../axios/axios';
 type Inputs = {
-    brand: string
-    address: string
-    map_link: string
-    location_image: string
+    sender: string;
+    receiver: string;
+    price: number;
+    brand: string;
 }
-const AddLocationComp: React.FC = () => {
+const AddGiftComp: React.FC = () => {
     const {
         register,
         handleSubmit,
         watch,
         formState: { errors },
-    } = useForm < Inputs > ();
+    } = useForm<Inputs>();
     const token = Cookies.get('token');
-    const [selectedFile, setSelectedFile] = useState(null);
-    const [img, setImg] = useState('')
     const brand = Cookies.get("email");
 
-    const saveImage = async () => {
+    const onAddGift = async (data: any) => {
         try {
-            const formData: any = new FormData();
-            formData.append("image", selectedFile);
-
-            const postToImgBB = await axios.post(`${IMGBB_API}?key=${IMGBB_KEY}`, formData);
-            console.log(postToImgBB)
-            if (postToImgBB.status === 200) {
-                setImg(postToImgBB.data.data.url);
-                return postToImgBB.data.data.url
-            }
-        } catch (e) {
-            console.log(e)
-        }
-    }
-    const onAddLocation = async (data: any) => {
-        try {
-            const res = await instance.post(`/location/createLocation`,
+            const res = await instance.post(`/gift/createGift`,
                 {
+                    sender: data.sender,
+                    receiver: data.receiver,
+                    price: data.price,
                     brand: brand,
-                    address: data.address,
-                    map_link: data.map_link,
-                    location_image: img
                 }, {
                 headers: {
                     authorization: `${token}`,
@@ -65,58 +45,53 @@ const AddLocationComp: React.FC = () => {
         }
     }
 
-    useEffect(() => {
-        if (selectedFile !== null) {
-            saveImage();
-        }
-    }, [selectedFile]);
     return (
         <div>
-            <h2 className="text-3xl font-semibold mb-2">Add Location</h2>
+            <h2 className="text-3xl font-semibold mb-2">Add Gift</h2>
             <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
                 <div className="border-b border-stroke px-6.5 py-4 dark:border-strokedark">
                     <h3 className="font-medium text-black dark:text-white">
-                        Add Location
+                        Add Gift
                     </h3>
                 </div>
-                <form action="#" onSubmit={handleSubmit(onAddLocation)}>
+                <form action="#" onSubmit={handleSubmit(onAddGift)}>
                     <div className="p-6.5">
                         <div className="mb-4.5">
                             <label className="mb-3 block text-sm font-medium text-black dark:text-white">
-                                Address 
+                                Sender Email
                             </label>
                             <input
-                                type="text"
-                                placeholder="Enter professional name"
-                                {...register("address", { required: true })}
+                                type="email"
+                                placeholder="Enter sender email"
+                                {...register("sender", { required: true })}
                                 className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                             />
                         </div>
-                        <div className='mb-4.5'>
+                        <div className="mb-4.5">
                             <label className="mb-3 block text-sm font-medium text-black dark:text-white">
-                                Location Image
+                                Receiver Email
                             </label>
                             <input
-                                type="file"
-                                onChange={(e: any) => setSelectedFile(e.target.files[0])}
-                                className="w-full cursor-pointer rounded-lg border-[1.5px] border-stroke bg-transparent outline-none transition file:mr-5 file:border-collapse file:cursor-pointer file:border-0 file:border-r file:border-solid file:border-stroke file:bg-whiter file:px-5 file:py-3 file:hover:bg-primary file:hover:bg-opacity-10 focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:file:border-form-strokedark dark:file:bg-white/30 dark:file:text-white dark:focus:border-primary"
+                                type="email"
+                                placeholder="Enter receiver email"
+                                {...register("receiver", { required: true })}
+                                className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                             />
                         </div>
-
-                        <div className="mb-6">
+                        <div className="mb-4.5">
                             <label className="mb-3 block text-sm font-medium text-black dark:text-white">
-                               Map Link
+                                Gift amount
                             </label>
                             <input
-                                type="url"
-                                placeholder="Enter map link"
-                                {...register("map_link", { required: true })}
+                                type="number"
+                                placeholder="Enter gift amount"
+                                {...register("price", { required: true })}
                                 className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                             />
                         </div>
 
                         <button className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray hover:bg-opacity-90">
-                            Add Location
+                            Add Gift
                         </button>
                     </div>
                 </form>
@@ -126,4 +101,4 @@ const AddLocationComp: React.FC = () => {
     );
 };
 
-export default AddLocationComp;
+export default AddGiftComp;

@@ -39,7 +39,7 @@ const EditSchedule: React.FC = () => {
         setIsOptionSelected(true);
     };
 
-    const brand = Cookies.get("name");
+    const brand = Cookies.get("email");
 
     useEffect(() => {
         const getSingleProfessional = async () => {

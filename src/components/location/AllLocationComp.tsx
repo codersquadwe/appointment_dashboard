@@ -5,10 +5,11 @@ import Cookies from 'js-cookie';
 import Image from 'next/image';
 import { MdDelete, MdModeEdit } from 'react-icons/md';
 import Link from 'next/link';
+import { useForm } from "react-hook-form"
 
 const AllLocationComp = () => {
     const [locations, setLocations] = useState<any[]>([]);
-    const brand = Cookies.get("name");
+    const brand = Cookies.get("email");
 
     const getAllLocations = async () => {
         try {
@@ -92,7 +93,6 @@ const AllLocationComp = () => {
                                     onClick={() => deleteLocation(location._id)}
                                 ><MdDelete /></button>
                                 <Link href={`/location/edit/${location._id}`} className="text-xl bg-warning text-[#fff] rounded-full p-2"
-                                    // onClick={() => handleEdit(location)}
                                 ><MdModeEdit /></Link>
                             </div>
                         </div>

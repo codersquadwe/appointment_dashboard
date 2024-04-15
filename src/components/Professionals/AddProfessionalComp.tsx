@@ -11,6 +11,7 @@ import instance from "@/axios/axios";
 
 type Inputs = {
     name: string
+    email: string
     description: string
     image: string
 }
@@ -24,8 +25,23 @@ const AddProfessionalComp: React.FC = () => {
     const token = Cookies.get('token');
     const [selectedFile, setSelectedFile] = useState(null);
     const [img, setImg] = useState('')
-    const brand = Cookies.get("name");
-    
+    const brand = Cookies.get("email");
+    const [users, setUsers] = useState<any>([]);
+    const [selectedProfessional, setSelectedProfessional] = useState<any>(null);
+    const [isOptionSelected, setIsOptionSelected] = useState<boolean>(false);
+    useEffect(() => {
+        const getUsers = async () => {
+            try {
+                const res = await instance.get(`/user/getAllUsers`);
+                if (res.status === 200) {
+                    setUsers(res.data.data);
+                }
+            } catch (e) {
+                console.log(e)
+            }
+        }
+        getUsers();
+    })
     const saveImage = async () => {
         try {
             const formData: any = new FormData();
@@ -46,6 +62,7 @@ const AddProfessionalComp: React.FC = () => {
             const res = await instance.post(`/professional/createProfessional`,
                 {
                     name: data.name,
+                    email: data.email,
                     description: data.description,
                     image: img,
                     brand: brand,
@@ -63,6 +80,10 @@ const AddProfessionalComp: React.FC = () => {
             console.log(e)
         }
     }
+
+    const changeTextColor = () => {
+        setIsOptionSelected(true);
+    };
 
     useEffect(() => {
         if (selectedFile !== null) {
@@ -90,6 +111,33 @@ const AddProfessionalComp: React.FC = () => {
                                 {...register("name", { required: true })}
                                 className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                             />
+                        </div>
+                        <div className="mb-4.5">
+                            <div className="relative z-20 bg-white dark:bg-form-input  mb-4.5">
+                                <label className="mb-3 block text-sm font-medium text-black dark:text-white">
+                                    Select Professional Email
+                                </label>
+                                <select
+                                    value={selectedProfessional}
+                                    onChange={(e) => {
+                                        setSelectedProfessional(e.target.value);
+                                        changeTextColor();
+                                    }}
+                                    className={`relative z-20 w-full appearance-none rounded border border-stroke bg-transparent ps-6 pr-12 py-3 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input ${isOptionSelected ? "text-black dark:text-white" : ""
+                                        }`}
+                                >
+                                    <option value="" disabled className="text-body dark:text-bodydark">
+                                        Select Professional
+                                    </option>
+                                    {users.map((user: any) => (
+                                        <option key={user._id} value={user.email} className="text-body dark:text-bodydark"> {user.email}</option>
+                                    ))}
+                                </select>
+
+                                <span className="absolute right-4 top-1/2 z-10 -translate-y-1/2">
+                                    <IoIosArrowDown />
+                                </span>
+                            </div>
                         </div>
                         <div className='mb-4.5'>
                             <label className="mb-3 block text-sm font-medium text-black dark:text-white">

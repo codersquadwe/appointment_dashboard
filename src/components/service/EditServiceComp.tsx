@@ -40,7 +40,7 @@ const EditServiceComp: React.FC = () => {
         setIsOptionSelected(true);
     };
 
-    const brand = Cookies.get("name");
+    const brand = Cookies.get("email");
     const id = useParams().id; // Ensure id is a string
     console.log(id);
 
